@@ -1,15 +1,18 @@
 const express = require("express");
+const connectDB = require("./config/db");
+const userRoutes = require("./routes/user.routes");
 require("dotenv").config();
+
 
 //Initialize the express application
 const app = express();
 app.use(express.json());
+//Connect to MongoDB
+connectDB();
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT || 3000}`);
 });
 
 //Defining routes
-app.get("/", (req, res) => {
-  res.send("Welcome to the Blog Backend!");
-});
+app.use("/api/users", userRoutes);
