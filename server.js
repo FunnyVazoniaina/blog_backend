@@ -3,7 +3,6 @@ const connectDB = require("./config/db");
 const userRoutes = require("./routes/user.routes");
 require("dotenv").config();
 
-
 //Initialize the express application
 const app = express();
 app.use(express.json());
