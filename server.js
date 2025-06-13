@@ -5,6 +5,9 @@ require("dotenv").config();
 
 //Initialize the express application
 const app = express();
+// Middleware to parse URL-encoded bodies like form submissions
+app.use(express.urlencoded({ extended: true }));
+// Middleware to parse JSON bodies
 app.use(express.json());
 //Connect to MongoDB
 connectDB();
