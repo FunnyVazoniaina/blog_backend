@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import slugify from "slugify";
+const mongoose = require("mongoose");
+const generateSlug = require("../middlewares/generateSlug.middleware.js");
 
 const postSchema = new mongoose.Schema(
   {
@@ -45,12 +45,7 @@ const postSchema = new mongoose.Schema(
   }
 );
 
-// Middleware pour générer le slug automatiquement avant sauvegarde
-postSchema.pre("validate", function (next) {
-  if (this.title && !this.slug) {
-    this.slug = slugify(this.title, { lower: true, strict: true });
-  }
-  next();
-});
+// Middleware to generate slug automatically before validation
+postSchema.pre("validate", generateSlug);
 
 module.exports = mongoose.model("Post", postSchema);
