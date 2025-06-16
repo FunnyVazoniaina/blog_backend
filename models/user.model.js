@@ -1,51 +1,24 @@
-const mongoose = require ('mongoose');
-const  generateSlug = require ('../middlewares/generateSlug.middleware.js');
+const mongoose = require("mongoose");
 
-const postSchema = new mongoose.Schema(
+//Defining the User schema
+const userSchema = new mongoose.Schema(
   {
-    title: {
+    name: {
       type: String,
       required: true,
-      trim: true,
-      maxlength: 150,
     },
-    slug: {
+    email: {
       type: String,
+      required: true,
       unique: true,
-      lowercase: true,
     },
-    content: {
+    password: {
       type: String,
       required: true,
-    },
-    coverImage: {
-      type: String,
-      default: '',
-    },
-    author: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
-    tags: {
-      type: [String],
-      default: [],
-    },
-    likes: {
-      type: Number,
-      default: 0,
-    },
-    isPublished: {
-      type: Boolean,
-      default: true,
     },
   },
   {
-    timestamps: true,
+    timestamps: true, // Automatically manage createdAt and updatedAt fields
   }
 );
-
-// Middleware to generate slug automatically before validation
-postSchema.pre('validate', generateSlug);
-
-module.exports = mongoose.model('Post', postSchema);
+module.exports = mongoose.model("User", userSchema);
