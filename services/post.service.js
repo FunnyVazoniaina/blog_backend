@@ -20,21 +20,27 @@ class PostService {
    * @returns {Promise<Object>} The paginated posts.
    */
   static async getAllPosts(query) {
-    const { page = 1, limit = 10 } = query;
-    const skip = (page - 1) * limit;
-    const totalPosts = await Post.countDocuments();
-    const posts = await Post.find()
-      .skip(skip)
-      .limit(Number(limit))
-      .populate("author", "name email")
-      .sort({ createdAt: -1 });
+    try {
+      const { page = 1, limit = 10 } = query;
+      const skip = (page - 1) * limit;
+      const totalPosts = await Post.countDocuments();
+      const posts = await Post.find()
+        .skip(skip)
+        .limit(Number(limit))
+        .populate("author", "name email")
+        .sort({ createdAt: -1 });
 
-    return {
-      totalPosts,
-      currentPage: Number(page),
-      totalPages: Math.ceil(totalPosts / limit),
-      posts,
-    };
+      return {
+        totalPosts,
+        currentPage: Number(page),
+        totalPages: Math.ceil(totalPosts / limit),
+        posts,
+      };
+      console.log("Posts fetched successfully"); 
+      
+    } catch (error) {
+      throw new Error("Error fetching posts: " + error.message);
+    }
   }
   /**
    * Get a post by slug.

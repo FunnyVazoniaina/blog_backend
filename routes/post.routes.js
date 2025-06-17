@@ -9,7 +9,7 @@ const {
 } = require("../controllers/post.controller");
 
 router.post("/create", createPost);
-router.get("/", getAllPosts);
+router.get("/allPosts", getAllPosts);
 router.get("/:slug", getPostBySlug);
 router.put("/:slug", updatePostBySlug);
 router.get("/author/:authorId", getPostsByAuthor);
