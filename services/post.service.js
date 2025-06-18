@@ -36,8 +36,6 @@ class PostService {
         totalPages: Math.ceil(totalPosts / limit),
         posts,
       };
-      console.log("Posts fetched successfully"); 
-      
     } catch (error) {
       throw new Error("Error fetching posts: " + error.message);
     }
