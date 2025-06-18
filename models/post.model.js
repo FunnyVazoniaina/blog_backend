@@ -24,7 +24,7 @@ const postSchema = new mongoose.Schema(
     },
     author: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // lien vers l'entité User
+      ref: "User", // linked with the user entity
       required: true,
     },
     tags: {
