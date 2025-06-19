@@ -1,7 +1,6 @@
 const Post = require("../models/post.model.js");
 
 class PostService {
-
   /**
    * Create a new post.
    * @param {Object} postData - The data for the new post.
@@ -63,8 +62,27 @@ class PostService {
    * @returns {Promise<Object>} The updated post.
    */
   static async updatePostBySlug(slug, updateData) {
-    if (!Object.keys(updateData).length) {
+    if (
+      !updateData ||
+      typeof updateData !== "object" ||
+      Object.keys(updateData).length === 0
+    ) {
       throw new BadRequestError("No update data provided");
+    }
+
+    const existingPost = await Post.findOne({ slug });
+    if (!existingPost) {
+      throw new NotFoundError("Post not found");
+    }
+
+    const isSame = Object.keys(updateData).every((key) => {
+      // If key doesn't exist on post, it's a new value
+      if (!(key in existingPost)) return false;
+      return String(existingPost[key]) === String(updateData[key]);
+    });
+
+    if (isSame) {
+      throw new BadRequestError("No changes were made to the post");
     }
 
     const post = await Post.findOneAndUpdate({ slug }, updateData, {
@@ -73,10 +91,6 @@ class PostService {
     })
       .populate("author", "name email")
       .lean();
-
-    if (!post) {
-      throw new NotFoundError("Post not found");
-    }
 
     return post;
   }
