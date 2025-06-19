@@ -1,6 +1,7 @@
 const Post = require("../models/post.model.js");
 
 class PostService {
+
   /**
    * Create a new post.
    * @param {Object} postData - The data for the new post.
@@ -14,6 +15,7 @@ class PostService {
       throw new Error("Error creating post: " + error.message);
     }
   }
+
   /**
    * Get all posts with pagination.
    * @param {Object} query - The query parameters for pagination.
@@ -40,6 +42,7 @@ class PostService {
       throw new Error("Error fetching posts: " + error.message);
     }
   }
+
   /**
    * Get a post by slug.
    * @param {String} slug - The slug of the post.
@@ -52,6 +55,7 @@ class PostService {
     }
     return post;
   }
+
   /**
    * Update a post by slug.
    * @param {String} slug - The slug of the post to update.
@@ -59,10 +63,16 @@ class PostService {
    * @returns {Promise<Object>} The updated post.
    */
   static async updatePostBySlug(slug, updateData) {
+    if (!Object.keys(updateData).length) {
+      throw new BadRequestError("No update data provided");
+    }
+
     const post = await Post.findOneAndUpdate({ slug }, updateData, {
       new: true,
       runValidators: true,
-    }).populate("author", "name email");
+    })
+      .populate("author", "name email")
+      .lean();
 
     if (!post) {
       throw new NotFoundError("Post not found");
@@ -70,6 +80,7 @@ class PostService {
 
     return post;
   }
+
   /**
    * Delete a post by slug.
    * @param {String} slug - The slug of the post to delete.
@@ -82,6 +93,7 @@ class PostService {
     }
     return post;
   }
+
   /**
    * Like a post by slug.
    * @param {String} slug - The slug of the post to like.
@@ -100,6 +112,7 @@ class PostService {
 
     return post;
   }
+
   /**
    * Unlike a post by slug.
    * @param {String} slug - The slug of the post to unlike.
@@ -118,6 +131,7 @@ class PostService {
 
     return post;
   }
+
   /**
    * Get all posts by a specific author.
    * @param {String} authorId - The ID of the author.
@@ -135,4 +149,5 @@ class PostService {
     return posts;
   }
 }
+
 module.exports = PostService;
