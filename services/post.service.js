@@ -1,4 +1,5 @@
 const Post = require("../models/post.model.js");
+const NotFoundError = require("../utils/errors");
 
 class PostService {
   /**
@@ -121,7 +122,7 @@ class PostService {
     ).populate("author", "name email");
 
     if (!post) {
-      throw new Error("Post not found");
+      throw new NotFoundError("Post not found");
     }
 
     return post;
