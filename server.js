@@ -1,4 +1,5 @@
 const express = require("express");
+const errorHandler = require("./middlewares/errorHandler");
 const connectDB = require("./config/db");
 const userRoutes = require("./routes/user.routes");
 const postRoutes = require("./routes/post.routes");
@@ -34,3 +35,6 @@ app.listen(process.env.PORT, () => {
 //Defining routes
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
+
+//error handling middleware
+app.use(errorHandler);
