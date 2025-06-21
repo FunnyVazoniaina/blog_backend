@@ -62,28 +62,22 @@ class UserService {
   // Login user
   static async loginUser(userData) {
     const { email, password } = userData;
-    // Validate required fields
+
     if (!userData) {
       throw new Error("Email and password are required");
     }
-
-    // Validate email format
     if (!isValidEmail(email)) {
       throw new Error("Invalid email format");
     }
-
-    // Find user by email
     const user = await User.findOne({ email });
     if (!user) {
       throw new Error("User not found with this email");
     }
-
     // Check password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       throw new Error("Invalid password");
     }
-
     // Generate JWT token
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: process.env.EXPIRES_IN,
